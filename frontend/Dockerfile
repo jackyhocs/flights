@@ -1,10 +1,9 @@
-# syntax=docker/dockerfile:1
 FROM node:20-alpine AS build
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
+COPY .npmrc package.json package-lock.json ./
+RUN npm ci
 
 COPY . .
 RUN npm run build

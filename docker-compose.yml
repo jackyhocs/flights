@@ -12,13 +12,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      secrets:
-        - npmrc
     ports:
       - "3000:80"
     depends_on:
       - backend
-
-secrets:
-  npmrc:
-    file: ${HOME}/.npmrc
