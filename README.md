@@ -4,6 +4,7 @@
 1. Pull this repo
 2. run `docker-compose up` to spin up backend
 	* Backend is reachable at port 5000
+	* Frontend is reachable at port 3000
 
 
 ### Testing

@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 
+import ResultsList from './components/ResultsList'
 import SearchForm from './components/SearchForm'
 import { useFlightSearch } from './hooks/useFlightSearch'
 
@@ -31,10 +32,13 @@ function App() {
           {loading && <Typography>Searching...</Typography>}
           {error && <Typography color="error">{error}</Typography>}
           {data && (
-            <Typography>
-              Found {data.count} itinerar{data.count === 1 ? 'y' : 'ies'} from {data.origin} to{' '}
-              {data.destination} on {data.date}.
-            </Typography>
+            <>
+              <Typography>
+                Found {data.count} itinerar{data.count === 1 ? 'y' : 'ies'} from {data.origin} to{' '}
+                {data.destination} on {data.date}.
+              </Typography>
+              <ResultsList itineraries={data.itineraries} />
+            </>
           )}
         </Stack>
       </Container>
