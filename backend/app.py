@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from flask import Flask, jsonify
@@ -9,7 +10,7 @@ from skypath.routes import bp
 
 BACKEND_DIR = Path(__file__).resolve().parent
 REPO_ROOT = BACKEND_DIR.parent
-DEFAULT_DATASET_PATH = REPO_ROOT / "flights.json"
+DEFAULT_DATASET_PATH = Path(os.environ.get("FLIGHTS_DATASET_PATH", REPO_ROOT / "flights.json"))
 
 
 def create_app(dataset_path=DEFAULT_DATASET_PATH):
