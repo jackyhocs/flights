@@ -5,6 +5,19 @@
 2. run `docker-compose up` to spin up backend
 	* Backend is reachable at port 5000
 
+
+### Testing
+Backend
+1. cd to `backend` folder
+2. create and run a venv
+3. install packages from requirements-dev.txt
+4. run `python -m pytest tests/ -q`
+
+Frontend
+1. cd to `frontend` folder
+2. run `npm install`
+3. run `npm run test`
+
 ## Backend Overall Notes
 * Flake8 is used for enforcing style and consistency. However, we can enforce code styling as one of the CI/CD steps instead, or have linting be an explicit step as part of the git push process.
 * There is a typo in "JFK" for flight SP995, I have decided to rename this to the corrected version instead of throwing a warning and not logging this.We may want to throw a warning instead, but I currently prefer just making the change since this is a small dataset and having one more available flight may affect test cases.
@@ -39,11 +52,13 @@ Decisions/Improvements:
 1. Unwrapped/naked Exceptions: In production, we probably want to wrap the existing exceptions with traces/output to be logged for debugging purposes. For this task we do not log anything and we just return the `400` error code with a simple message indicating the reason behind the failed validation.
 2. Dataload time: Currently we load and process the data at app startup instead of at query-time. This is so that if we have a poisoned pill/bad data loading, we will find out at the time that the service spins up instead of at request time. Also, having built the graph and processed the data before requests are served, we ensure that the requests are fast and users do not have to wait for the computing overhead.
 3. Infra improvements: Currently with flask dev server, it is single threaded, so to handle more production traffic, we can use uWSGI or gunicorn. For proxying, load balancing and cache, I've used nginx previously so I would probably use that unless the team has something better built-in house or an existing solution.
-4. Airport validations/lookup: Instead of having a backend endpoint that will return a list of valid endpoints, I have decided to have frontend and backend validation on the airport field. 
+4. Airport validations/lookup: Instead of having a backend endpoint that will return a list of valid endpoints, I have decided to have frontend and backend validation on the airport field. While we enforce that the user's input form contains only valid airports, we can choose to allow this to be a text box but that would require more validation. For the purposes of this demo/task, I've made it so it's the simplest.
 
 
 ## Frontend notes
 * Apologies for the UX, I have chosen to use Material UI and FontAwesome icons, as that is what I have used previously for work and for school projects and am more comfortable with them. These can easily be replaced with in-house or other components or icon libraries.
 
 Decisions/Improvements
-1. I used Vite as the build/development tool because it is lightweight and I do not need the control that Webpack offers at this time. 
+1. Tooling: I used Vite as the build/development tool because it is lightweight and I do not need the control that Webpack offers at this time. 
+2. Hardcoded list of airports: Instead of a text box, as I have outlined above, I have instead hardcoded a list of valid airports. In production, we can have this be a different experience with a text box that has auto-fill based on the input (users may type in the whole airport name instead of the airport code). This approach normalizes this behaviour and provides clear data to provide to the backend. First guardrail of user input, but we will perform validations on both backend and frontend to harden the service from bad inputs. We have already created a check in the frontend to prevent users from having the same airport Origin/Destination. Logically speaking, we should have a check for flights in the past, as trip-booking are for future trips, but for the sake of the data, we have ignored this.
+3. Frontend verification/auth: Again, since we do not have any form of bot/spam guards, we will accept all requests. For rate limiting and other auth, we could add this and some hidden forms that the bots will fill out to prevent DDOS/spam.
