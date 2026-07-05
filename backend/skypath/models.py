@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 
+from skypath.time_utils import duration_minutes
+
 
 @dataclass(frozen=True)
 class Airport:
@@ -43,8 +45,7 @@ class Itinerary:
 
     @property
     def total_duration_minutes(self) -> int:
-        delta = self.segments[-1].arrival_utc - self.segments[0].departure_utc
-        return int(delta.total_seconds() // 60)
+        return duration_minutes(self.segments[0].departure_utc, self.segments[-1].arrival_utc)
 
     @property
     def total_price(self) -> float:
