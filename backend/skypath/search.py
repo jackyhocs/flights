@@ -26,7 +26,8 @@ def search_itineraries(
     return itineraries
 
 
-# Main function that performs the DFS for finding the flights given a current "path", list of Flights
+# Main function that performs the DFS for finding the flights given a current
+# "path", list of Flights
 def _search_from(
     graph: dict[str, list[Flight]],
     destination: str,
