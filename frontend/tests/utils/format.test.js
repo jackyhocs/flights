@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatCurrency, formatDuration, formatLocalDateTime } from '../../src/utils/format'
+import { formatCurrency, formatDuration, formatLocalDateTime, formatTimezoneAbbreviation } from '../../src/utils/format'
 
 describe('formatDuration', () => {
   it('formats whole hours and minutes', () => {
@@ -41,5 +41,19 @@ describe('formatLocalDateTime', () => {
 
   it('formats a late evening time as PM', () => {
     expect(formatLocalDateTime('2024-03-15T23:45:00')).toBe('Mar 15, 2024 · 11:45 PM')
+  })
+})
+
+describe('formatTimezoneAbbreviation', () => {
+  it('resolves the abbreviation for a US zone observing daylight saving in March', () => {
+    expect(formatTimezoneAbbreviation('2024-03-15T08:30:00', 'America/Los_Angeles')).toBe('PDT')
+  })
+
+  it('resolves the abbreviation for a Southern Hemisphere zone (used by the SYD -> LAX date-line case)', () => {
+    expect(formatTimezoneAbbreviation('2024-03-16T09:00:00', 'Australia/Sydney')).toBe('GMT+11')
+  })
+
+  it('resolves a fixed-offset zone with no daylight saving', () => {
+    expect(formatTimezoneAbbreviation('2024-03-15T08:30:00', 'Asia/Tokyo')).toBe('GMT+9')
   })
 })

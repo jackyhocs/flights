@@ -3,24 +3,31 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
-import { formatCurrency, formatLocalDateTime } from '../utils/format'
+import { AIRPORT_TIMEZONES } from '../data/airports'
+import { formatCurrency, formatLocalDateTime, formatTimezoneAbbreviation } from '../utils/format'
 
 function SegmentRow({ segment }) {
+  const departureTz = formatTimezoneAbbreviation(segment.departureTimeLocal, AIRPORT_TIMEZONES[segment.origin])
+  const arrivalTz = formatTimezoneAbbreviation(segment.arrivalTimeLocal, AIRPORT_TIMEZONES[segment.destination])
+
   return (
-    <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ py: 1 }}>
+    <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" sx={{ py: 1 }}>
       <Stack>
         <Typography variant="body2" sx={{ fontWeight: 600 }}>
           <FontAwesomeIcon icon={faPlaneDeparture} /> {segment.origin} → {segment.destination}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          {formatLocalDateTime(segment.departureTimeLocal)} — {formatLocalDateTime(segment.arrivalTimeLocal)}
+          {formatLocalDateTime(segment.departureTimeLocal)} {departureTz} — {formatLocalDateTime(segment.arrivalTimeLocal)}{' '}
+          {arrivalTz}
         </Typography>
         <Typography variant="caption" color="text.secondary">
           {segment.airline} {segment.flightNumber} · {segment.aircraft}
         </Typography>
       </Stack>
 
-      <Typography variant="body2">{formatCurrency(segment.price)}</Typography>
+      <Typography variant="body2" sx={{ ml: 'auto' }}>
+        {formatCurrency(segment.price)}
+      </Typography>
     </Stack>
   )
 }

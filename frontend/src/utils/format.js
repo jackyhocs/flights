@@ -30,3 +30,16 @@ export function formatLocalDateTime(isoString) {
 
   return `${MONTH_NAMES[month - 1]} ${day}, ${year} · ${hour12}:${paddedMinute} ${period}`
 }
+
+// Resolves the timezone abbreviation (e.g. "PDT") an airport's own IANA zone
+// used at a given local wall-clock moment, so travelers can tell at a glance
+// that a departure/arrival pair spans different clocks (e.g. SYD -> LAX).
+export function formatTimezoneAbbreviation(isoString, timeZone) {
+  const [datePart, timePart] = isoString.split('T')
+  const [year, month, day] = datePart.split('-').map(Number)
+  const [hour, minute] = timePart.split(':').map(Number)
+
+  const instant = new Date(Date.UTC(year, month - 1, day, hour, minute))
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone, timeZoneName: 'short' }).formatToParts(instant)
+  return parts.find((part) => part.type === 'timeZoneName')?.value ?? ''
+}
