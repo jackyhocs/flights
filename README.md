@@ -57,7 +57,6 @@ Decisions/Improvements:
 
 ## Frontend notes
 * Apologies for the UX, I have chosen to use Material UI and FontAwesome icons, as that is what I have used previously for work and for school projects and am more comfortable with them. These can easily be replaced with in-house or other components or icon libraries.
-* I wasn't able to get the docker-compose to play well with public packages on my setup due to npm credentials not being recognized. As a workaround, I've updated the .gitignore to ignore the .npmrc file but have checked in a temporary/placeholder file for the user to place their .npmrc file get the packages to be auth'd successfully. this is not acceptable for prod but this is my current workaround to unblock myself.
 
 Decisions/Improvements
 1. Tooling: I used Vite as the build/development tool because it is lightweight and I do not need the control that Webpack offers at this time. 
