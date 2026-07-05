@@ -1,4 +1,4 @@
-import { faPlaneDeparture } from '@fortawesome/free-solid-svg-icons'
+import { faPlaneArrival, faPlaneDeparture } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -14,7 +14,8 @@ function SegmentRow({ segment }) {
     <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" sx={{ py: 1 }}>
       <Stack>
         <Typography variant="body2" sx={{ fontWeight: 600 }}>
-          <FontAwesomeIcon icon={faPlaneDeparture} /> {segment.origin} → {segment.destination}
+          <FontAwesomeIcon icon={faPlaneDeparture} /> {segment.origin} → <FontAwesomeIcon icon={faPlaneArrival} />{' '}
+          {segment.destination}
         </Typography>
         <Typography variant="caption" color="text.secondary">
           {formatLocalDateTime(segment.departureTimeLocal)} {departureTz} — {formatLocalDateTime(segment.arrivalTimeLocal)}{' '}
