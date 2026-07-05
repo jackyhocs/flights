@@ -129,7 +129,8 @@ def test_load_dataset_keeps_only_first_flight_when_flight_number_is_duplicated(t
 
 
 # Test case for a flight record missing an entire required field (not just an
-# invalid value) must be skipped and logged, not crash the whole app on startup with a KeyError.
+# invalid value) must be skipped and logged, not crash the whole app on
+# startup with a KeyError.
 def test_load_dataset_skips_flight_with_missing_required_field(tmp_path):
     flight = {k: v for k, v in DEFAULT_FLIGHT.items() if k != "price"}
     path = _write_raw_dataset(tmp_path, DEFAULT_AIRPORTS, [flight])
@@ -147,7 +148,8 @@ def test_load_dataset_skips_flight_with_unparseable_date(tmp_path):
     assert flights == []
 
 
-# Test case for a flight where the arrival time is before the departure time even including a timezone conversion
+# Test case for a flight where the arrival time is before the departure time
+# even including a timezone conversion.
 # Overnight flights are fine, but this is to check for time travel.
 # TODO: remove this test case when time travel exists
 def test_load_dataset_skips_flight_where_arrival_is_not_after_departure(tmp_path):
