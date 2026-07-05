@@ -3,16 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
+import Stack from '@mui/material/Stack'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 
 import SearchForm from './components/SearchForm'
+import { useFlightSearch } from './hooks/useFlightSearch'
 
 function App() {
-  const handleSearch = (params) => {
-    // API wiring lands in the next step; log for now.
-    console.log('search', params)
-  }
+  const { data, loading, error, search } = useFlightSearch()
 
   return (
     <>
@@ -26,7 +25,18 @@ function App() {
       </AppBar>
 
       <Container component="main" maxWidth="sm" sx={{ py: 4 }}>
-        <SearchForm onSearch={handleSearch} />
+        <Stack spacing={2}>
+          <SearchForm onSearch={search} />
+
+          {loading && <Typography>Searching...</Typography>}
+          {error && <Typography color="error">{error}</Typography>}
+          {data && (
+            <Typography>
+              Found {data.count} itinerar{data.count === 1 ? 'y' : 'ies'} from {data.origin} to{' '}
+              {data.destination} on {data.date}.
+            </Typography>
+          )}
+        </Stack>
       </Container>
     </>
   )
