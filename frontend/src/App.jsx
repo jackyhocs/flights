@@ -37,6 +37,11 @@ function App() {
                 Found {data.count} itinerar{data.count === 1 ? 'y' : 'ies'} from {data.origin} to{' '}
                 {data.destination} on {data.date}.
               </Typography>
+              {data.count > 0 && (
+                <Typography variant="body2" color="text.secondary">
+                  Sorted by total trip duration, shortest first.
+                </Typography>
+              )}
               <ResultsList itineraries={data.itineraries} />
             </>
           )}

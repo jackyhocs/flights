@@ -57,7 +57,8 @@ describe('ItineraryCard', () => {
   it('renders a nonstop itinerary with no layover badges', () => {
     render(<ItineraryCard itinerary={NONSTOP_ITINERARY} />)
 
-    expect(screen.getByText(/Nonstop · 3h 15m/)).toBeInTheDocument()
+    expect(screen.getByText('Nonstop')).toBeInTheDocument()
+    expect(screen.getByText(/3h 15m/)).toBeInTheDocument()
     expect(screen.getAllByText('$299.00')).toHaveLength(2)
     expect(screen.getByText('JFK → LAX')).toBeInTheDocument()
     expect(screen.queryByText(/layover/)).not.toBeInTheDocument()
@@ -66,7 +67,8 @@ describe('ItineraryCard', () => {
   it('renders a one-stop itinerary with both segments and the layover badge between them', () => {
     render(<ItineraryCard itinerary={ONE_STOP_ITINERARY} />)
 
-    expect(screen.getByText(/1 stop · 5h 30m/)).toBeInTheDocument()
+    expect(screen.getByText('1 stop')).toBeInTheDocument()
+    expect(screen.getByText(/5h 30m/)).toBeInTheDocument()
     expect(screen.getByText('$450.00')).toBeInTheDocument()
     expect(screen.getByText('JFK → ORD')).toBeInTheDocument()
     expect(screen.getByText('ORD → LAX')).toBeInTheDocument()

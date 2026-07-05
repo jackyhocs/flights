@@ -1,5 +1,8 @@
+import { faClock, faTag } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import Chip from '@mui/material/Chip'
 import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -9,20 +12,27 @@ import LayoverBadge from './LayoverBadge'
 import SegmentRow from './SegmentRow'
 
 function stopsLabel(stops) {
-  if (stops === 0) return 'Nonstop'
-  return `${stops} stop${stops > 1 ? 's' : ''}`
+  if (stops === 0) return 'Nonstop '
+  return `${stops} stop${stops > 1 ? 's' : ''} `
 }
 
 function ItineraryCard({ itinerary }) {
   return (
     <Card variant="outlined">
       <CardContent>
-        <Stack direction="row" justifyContent="space-between" alignItems="baseline">
-          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-            {stopsLabel(itinerary.stops)} · {formatDuration(itinerary.totalDurationMinutes)}
-          </Typography>
-          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-            {formatCurrency(itinerary.totalPrice)}
+        <Stack direction="row" justifyContent="flex-start" alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Chip
+              label={stopsLabel(itinerary.stops)}
+              size="small"
+              sx={{ backgroundColor: '#cdeafe', color: '#0d3b66', fontWeight: 600 }}
+            />
+            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+              <FontAwesomeIcon icon={faClock} /> {formatDuration(itinerary.totalDurationMinutes)}
+            </Typography>
+          </Stack>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600, ml: 'auto' }}>
+            <FontAwesomeIcon icon={faTag} /> {formatCurrency(itinerary.totalPrice)}
           </Typography>
         </Stack>
 
