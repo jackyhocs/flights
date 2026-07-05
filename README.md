@@ -1,7 +1,7 @@
 # Skypath
 
 ## Backend Overall Notes
-* Flake8 is used for enforcing style and consistency
+* Flake8 is used for enforcing style and consistency. However, we can enforce code styling as one of the CI/CD steps instead, or have linting be an explicit step as part of the git push process.
 * There is a typo in "JFK" for flight SP995, I have decided to rename this to the corrected version instead of throwing a warning and not logging this.We may want to throw a warning instead, but I currently prefer just making the change since this is a small dataset and having one more available flight may affect test cases.
 * For constants, we currently have a static file that is checked into the repo that contains all the constants (i.e. max stops, etc). This being a file checked into the main repo is fine for a project but if this service scales and there are lengthy CI/CD processess/steps, we may instead want to have the config be checked into a separate repo to decouple the config with the code changes. For now since this is fine but this is a tradeoff to be made in the future.
 
@@ -32,5 +32,6 @@ Assumptions:
 
 Decisions/Improvements:
 1. Unwrapped/naked Exceptions: In production, we probably want to wrap the existing exceptions with traces/output to be logged for debugging purposes. For this task we do not log anything and we just return the `400` error code with a simple message indicating the reason behind the failed validation.
-2. Dataload time: Currently we load and process the data at app startup instead of at query-time. This is so that if we have a poisoned pill/bad data loading, we will find out at the time that the service spins up instead of at request time. Also, having built the graph and processed the data before requests are served, we ensure that the requests are fast and users do not have to wait for the computing overhead. 
+2. Dataload time: Currently we load and process the data at app startup instead of at query-time. This is so that if we have a poisoned pill/bad data loading, we will find out at the time that the service spins up instead of at request time. Also, having built the graph and processed the data before requests are served, we ensure that the requests are fast and users do not have to wait for the computing overhead.
 3. Infra improvements: Currently with flask dev server, it is single threaded, so to handle more production traffic, we can use uWSGI or gunicorn. For proxying, load balancing and cache, I've used nginx previously so I would probably use that unless the team has something better built-in house or an existing solution.
+4. Airport validations/lookup: Instead of having a backend endpoint that will return a list of valid endpoints, I have decided to have frontend and backend validation on the airport field. 

@@ -7,6 +7,7 @@ from skypath.constants import DATE_FORMAT
 # configuration file or repo depending on computation/lookup costs
 AIRPORT_CODE_PATTERN = re.compile(r"^[A-Z]{3}$")
 
+
 # Helper to validate incoming request payload
 def validate_search_params(
     origin: str,
