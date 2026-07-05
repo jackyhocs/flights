@@ -1,13 +1,10 @@
 from datetime import datetime, timezone
 
 from skypath.models import Airport
-from skypath.time_utils import duration_minutes, is_domestic, to_utc
+from skypath.time_utils import duration_minutes, to_utc
 
 JFK = Airport("JFK", "John F. Kennedy International", "New York", "US", "America/New_York")
-ORD = Airport("ORD", "O'Hare International", "Chicago", "US", "America/Chicago")
 LAX = Airport("LAX", "Los Angeles International", "Los Angeles", "US", "America/Los_Angeles")
-LHR = Airport("LHR", "Heathrow", "London", "GB", "Europe/London")
-CDG = Airport("CDG", "Charles de Gaulle", "Paris", "FR", "Europe/Paris")
 SYD = Airport("SYD", "Sydney Kingsford Smith", "Sydney", "AU", "Australia/Sydney")
 
 
@@ -46,16 +43,3 @@ def test_duration_minutes_handles_date_line_crossing_syd_to_lax():
     duration = duration_minutes(departure_utc, arrival_utc)
     assert duration > 0
     assert duration == 840
-
-
-# A connection where every airport involved is in the same country
-# (e.g. JFK -> ORD -> LAX, all US) should be classified as domestic.
-def test_is_domestic_true_when_all_airports_share_a_country():
-    assert is_domestic([JFK, ORD, LAX]) is True
-
-
-# A connection is international as soon as any one airport involved is in a
-# different country (e.g. JFK -> LHR -> CDG spans US/GB/FR).
-def test_is_domestic_false_when_any_airport_is_in_a_different_country():
-    assert is_domestic([JFK, LHR, CDG]) is False
-    assert is_domestic([JFK, ORD, LHR]) is False

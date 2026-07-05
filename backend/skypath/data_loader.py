@@ -3,15 +3,11 @@ import logging
 from datetime import datetime
 from os import PathLike
 
+from skypath.constants import REQUIRED_FLIGHT_FIELDS
 from skypath.models import Airport, Flight
 from skypath.time_utils import to_utc
 
 logger = logging.getLogger(__name__)
-
-REQUIRED_FLIGHT_FIELDS = [
-    "flightNumber", "airline", "origin", "destination",
-    "departureTime", "arrivalTime", "price", "aircraft",
-]
 
 
 def load_dataset(path: str | PathLike) -> tuple[dict[str, Airport], list[Flight]]:
@@ -84,6 +80,8 @@ def _parse_flight(raw_flight: dict, airports: dict[str, Airport], index: int) ->
         airline=raw_flight["airline"],
         origin=origin.code,
         destination=destination.code,
+        origin_country=origin.country,
+        destination_country=destination.country,
         departure_local=departure_local,
         arrival_local=arrival_local,
         departure_utc=departure_utc,

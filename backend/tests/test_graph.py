@@ -12,6 +12,8 @@ def _flight(flight_number, origin, destination, departure_utc, arrival_utc):
         airline="SkyPath Airways",
         origin=origin,
         destination=destination,
+        origin_country="US",
+        destination_country="US",
         departure_local=departure_utc,
         arrival_local=arrival_utc,
         departure_utc=departure_utc,

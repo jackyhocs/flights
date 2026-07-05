@@ -19,6 +19,8 @@ class Flight:
     airline: str
     origin: str
     destination: str
+    origin_country: str
+    destination_country: str
     departure_local: datetime
     arrival_local: datetime
     departure_utc: datetime
