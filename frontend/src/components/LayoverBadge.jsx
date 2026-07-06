@@ -11,7 +11,7 @@ function LayoverBadge({ layover }) {
       variant="outlined"
       color={layover.type === 'international' ? 'warning' : 'default'}
       icon={<FontAwesomeIcon icon={faHourglassHalf} />}
-      label={`${formatDuration(layover.durationMinutes)} layover in ${layover.airport} (${layover.type})`}
+      label={`${formatDuration(layover.durationMinutes)} layover in ${layover.airport}`}
     />
   )
 }

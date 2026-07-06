@@ -107,7 +107,7 @@ describe('ItineraryCard', () => {
     expect(screen.getByText('$450.00')).toBeInTheDocument()
     expect(screen.getByText('JFK → ORD')).toBeInTheDocument()
     expect(screen.getByText('ORD → LAX')).toBeInTheDocument()
-    expect(screen.getByText(/1h 30m layover in ORD \(domestic\)/)).toBeInTheDocument()
+    expect(screen.getByText(/1h 30m layover in ORD/)).toBeInTheDocument()
   })
 
   it('labels an itinerary with an international layover as International', () => {
