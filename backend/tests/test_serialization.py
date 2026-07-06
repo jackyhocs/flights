@@ -6,13 +6,13 @@ from skypath.serialization import serialize_response
 
 # Helper to build a Flight with sensible defaults, only varying the fields a
 # given test actually cares about.
-def _flight(flight_number, origin, destination, price=100.0):
+def _flight(flight_number, origin, destination, price=100.0, origin_country="US", destination_country="US"):
     departure = datetime(2024, 3, 15, 8, tzinfo=timezone.utc)
     arrival = datetime(2024, 3, 15, 11, tzinfo=timezone.utc)
     return Flight(
         flight_number=flight_number, airline="SkyPath Airways",
         origin=origin, destination=destination,
-        origin_country="US", destination_country="US",
+        origin_country=origin_country, destination_country=destination_country,
         departure_local=departure, arrival_local=arrival,
         departure_utc=departure, arrival_utc=arrival,
         price=price, aircraft="A320",
@@ -43,6 +43,7 @@ def test_serialize_response_builds_direct_itinerary_with_documented_shape():
     assert serialized["id"] == "SP101"
     assert serialized["stops"] == 0
     assert serialized["totalPrice"] == 100.0
+    assert serialized["tripType"] == "domestic"
     assert serialized["layovers"] == []
     assert serialized["segments"][0] == {
         "flightNumber": "SP101", "airline": "SkyPath Airways",
@@ -83,3 +84,16 @@ def test_serialize_response_reports_international_layover_type():
     response = serialize_response("JFK", "CDG", "2024-03-15", [itinerary])
 
     assert response["itineraries"][0]["layovers"][0]["type"] == "international"
+    assert response["itineraries"][0]["tripType"] == "international"
+
+
+# A nonstop itinerary crossing countries has no layovers to consult, so
+# tripType must fall back to comparing the origin/destination countries
+# directly rather than defaulting to "domestic".
+def test_serialize_response_reports_international_trip_type_for_nonstop_crossing_countries():
+    flight = _flight("SP1", "JFK", "LHR", origin_country="US", destination_country="GB")
+    itinerary = Itinerary(segments=[flight])
+
+    response = serialize_response("JFK", "LHR", "2024-03-15", [itinerary])
+
+    assert response["itineraries"][0]["tripType"] == "international"

@@ -16,6 +16,7 @@ def _serialize_itinerary(itinerary) -> dict:
         "stops": itinerary.stops,
         "totalDurationMinutes": itinerary.total_duration_minutes,
         "totalPrice": itinerary.total_price,
+        "tripType": "domestic" if itinerary.is_domestic else "international",
         "segments": [_serialize_segment(segment) for segment in itinerary.segments],
         "layovers": [_serialize_layover(layover) for layover in itinerary.layovers],
     }

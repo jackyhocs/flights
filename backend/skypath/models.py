@@ -52,3 +52,14 @@ class Itinerary:
     @property
     def total_price(self) -> float:
         return sum(segment.price for segment in self.segments)
+
+    # An itinerary is domestic only if every leg stays within one country.
+    # With layovers, each one's own domestic/international type already
+    # captures this transitively (it was derived from its adjacent legs), so
+    # checking all of them is sufficient. A nonstop itinerary has no layovers,
+    # so origin/destination country is compared directly instead.
+    @property
+    def is_domestic(self) -> bool:
+        if not self.layovers:
+            return self.segments[0].origin_country == self.segments[-1].destination_country
+        return all(layover.is_domestic for layover in self.layovers)

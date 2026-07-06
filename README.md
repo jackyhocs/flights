@@ -1,8 +1,12 @@
 # Skypath
 
+Flight connection search engine: given an origin, destination, and date, finds all direct, 1-stop, and
+2-stop itineraries and returns them sorted by total trip duration. Flask backend + React (Vite) frontend,
+run together via `docker-compose up`.
+
 ## Run instructions
 1. Pull this repo
-2. run `docker-compose up` to spin up backend
+2. run `docker-compose up` to spin up frontend and backend services
 	* Backend is reachable at port 5000
 	* Frontend is reachable at port 3000
 
@@ -19,9 +23,20 @@ Frontend
 2. run `npm install`
 3. run `npm run test`
 
+## API Contract
+
+`GET /api/search?origin={AIRPORTCODE}&destination={AIRPORTCODE}&date={DATETIME}`
+
+All three params are required. Returns `400 {"error": "..."}` for missing/malformed params, non-3-letter
+codes, an unknown airport code, `origin == destination`, or a bad date format like `2024-03-15`.
+
+On success, returns `200` with a list of Itineraries sorted ascending by `totalDurationMinutes`. Each itinerary has `stops`, `totalDurationMinutes`,
+`totalPrice`, a list of `segments` (flight number, airline, origin/destination, local departure/arrival
+times, price, aircraft), and a list of `layovers` (airport, duration, and `domestic`/`international` type).
+
+
 ## Backend Overall Notes
 * Flake8 is used for enforcing style and consistency. However, we can enforce code styling as one of the CI/CD steps instead, or have linting be an explicit step as part of the git push process.
-* There is a typo in "JFK" for flight SP995, I have decided to rename this to the corrected version instead of throwing a warning and not logging this.We may want to throw a warning instead, but I currently prefer just making the change since this is a small dataset and having one more available flight may affect test cases.
 * For constants, we currently have a static file that is checked into the repo that contains all the constants (i.e. max stops, etc). This being a file checked into the main repo is fine for a project but if this service scales and there are lengthy CI/CD processess/steps, we may instead want to have the config be checked into a separate repo to decouple the config with the code changes. For now since this is fine but this is a tradeoff to be made in the future.
 
 
@@ -29,10 +44,12 @@ Frontend
 Assumptions:
 1. Data cleanliness: I have unit tests to check that the data provided is reasonably accurate to the json file provided. This loader does not anticipate for cases where, for example, if certain flights have airports with different casing. I have added guards for scenarios around missing/malformed required fields, invalid/unparseable dates, impossible flights (going back in time), and empty datasets, but I believe that having valid cases and data will be more interesting instead of having pedantic verification/tests.  
 
-Decisions:
+Decisions/Improvements:
 1. In the happy case unit tests, we load the full dataset directly from the json file. This is a decision made right now to ensure tests are hermetic and isolated. This is at the cost of time to load/parse the json files, but because the dataset file is small, this is not be a concern right now. If datasets get bigger, then we will revisit this based on what the requirements of the unit tests are.
 2. In the edge case unit tests, instead of loading in the entire json file, we create temporary json fixtures with the invalid/custom flight and ensure that the data loader skips the exceptions without crashing. 
 3. I have added a test case/restraint for uniqueness on the "flightNumber" key. Any two flights should not have the same flight number, in the event of a duplicate, only the first flight is loaded, the rest are logged as warning during json loading.
+4. Flights `SP995`, `SP996`, and `SP998` have string-typed `price` fields (e.g. `"299"` instead of `299`) on app startup, the loader parses these to a float.
+5. Flight `SP995` had a typo of "JKF", I have decided to rename this to the corrected version instead of throwing a warning and not logging this. We may want to throw a warning instead, but I currently prefer just making the change since this is a small dataset and having one more available flight may affect test cases.
 
 ### Search Algorithm decisions and assumptions
 Assumptions:
@@ -63,4 +80,4 @@ Decisions/Improvements
 1. Tooling: I used Vite as the build/development tool because it is lightweight and I do not need the control that Webpack offers at this time. 
 2. Hardcoded list of airports: Instead of a text box, as I have outlined above, I have instead hardcoded a list of valid airports. In production, we can have this be a different experience with a text box that has auto-fill based on the input (users may type in the whole airport name instead of the airport code). This approach normalizes this behaviour and provides clear data to provide to the backend. First guardrail of user input, but we will perform validations on both backend and frontend to harden the service from bad inputs. We have already created a check in the frontend to prevent users from having the same airport Origin/Destination. Logically speaking, we should have a check for flights in the past, as trip-booking are for future trips, but for the sake of the data, we have ignored this.
 3. Frontend verification/auth: Again, since we do not have any form of bot/spam guards, we will accept all requests. For rate limiting and other auth, we could add this and some hidden forms that the bots will fill out to prevent DDOS/spam.
-4. Timezones: The timezones for the tickets are set to the destination timezones for ease of travel. From the user perspective where electronic devices sync with local timezones once they get internet/cellular connections, I feel like this makes the user experience easier. It is possible for us to keep all the timestamps to the origin's timezone but this can be a product decision based on what users find is most reasonable. 
+4. Timezones: Each segment's departure and arrival times are shown in that airport's own local time (as returned by the backend), with a short timezone abbreviation appended (e.g. "8:30 AM PDT").

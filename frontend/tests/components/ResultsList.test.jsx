@@ -9,6 +9,7 @@ function itinerary(id, price) {
     stops: 0,
     totalDurationMinutes: 195,
     totalPrice: price,
+    tripType: 'domestic',
     segments: [
       {
         flightNumber: id,

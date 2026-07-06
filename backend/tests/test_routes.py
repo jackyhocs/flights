@@ -96,7 +96,7 @@ def test_search_jfk_to_lax_returns_itineraries_in_documented_shape(real_dataset_
 
     first_itinerary = body["itineraries"][0]
     assert set(first_itinerary) == {
-        "id", "stops", "totalDurationMinutes", "totalPrice", "segments", "layovers",
+        "id", "stops", "totalDurationMinutes", "totalPrice", "tripType", "segments", "layovers",
     }
     first_segment = first_itinerary["segments"][0]
     assert set(first_segment) == {

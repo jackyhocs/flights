@@ -17,6 +17,8 @@ function stopsLabel(stops) {
 }
 
 function ItineraryCard({ itinerary }) {
+  const domestic = itinerary.tripType === 'domestic'
+
   return (
     <Card variant="outlined">
       <CardContent>
@@ -26,6 +28,12 @@ function ItineraryCard({ itinerary }) {
               label={stopsLabel(itinerary.stops)}
               size="small"
               sx={{ backgroundColor: '#cdeafe', color: '#0d3b66', fontWeight: 600 }}
+            />
+            <Chip
+              label={domestic ? 'Domestic' : 'International'}
+              size="small"
+              variant="outlined"
+              color={domestic ? 'default' : 'warning'}
             />
             <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
               <FontAwesomeIcon icon={faClock} /> {formatDuration(itinerary.totalDurationMinutes)}
