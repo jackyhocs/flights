@@ -27,8 +27,14 @@ Frontend
 
 `GET /api/search?origin={AIRPORTCODE}&destination={AIRPORTCODE}&date={DATETIME}`
 
-All three params are required. Returns `400 {"error": "..."}` for missing/malformed params, non-3-letter
-codes, an unknown airport code, `origin == destination`, or a bad date format like `2024-03-15`.
+All three params are required. 
+
+AIRPORTCODE = 3-letter IATA airport code, provided in frontend dropdown
+DATETIME = valid ISO 8601 date time, provided via a widget on frontend
+
+Frontend widgets add enforcement to having valid data to be passed to backend. 
+
+However, backend is hardened against bad input in the event that the request is sent directly to the API. Returns `400 {"error": "..."}` for missing/malformed params, non-3-letter codes, an unknown airport code, `origin == destination`, or a bad date format that is not ISO 8601.
 
 On success, returns `200` with a list of Itineraries sorted ascending by `totalDurationMinutes`. Each itinerary has `stops`, `totalDurationMinutes`,
 `totalPrice`, a list of `segments` (flight number, airline, origin/destination, local departure/arrival
