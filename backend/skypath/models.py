@@ -28,6 +28,10 @@ class Flight:
     price: float
     aircraft: str
 
+    @property
+    def duration_minutes(self) -> int:
+        return duration_minutes(self.departure_utc, self.arrival_utc)
+
 
 @dataclass(frozen=True)
 class Layover:

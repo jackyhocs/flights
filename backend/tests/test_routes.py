@@ -101,7 +101,7 @@ def test_search_jfk_to_lax_returns_itineraries_in_documented_shape(real_dataset_
     first_segment = first_itinerary["segments"][0]
     assert set(first_segment) == {
         "flightNumber", "airline", "origin", "destination",
-        "departureTimeLocal", "arrivalTimeLocal", "price", "aircraft",
+        "departureTimeLocal", "arrivalTimeLocal", "durationMinutes", "price", "aircraft",
     }
 
 

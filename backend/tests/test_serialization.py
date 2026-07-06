@@ -50,6 +50,7 @@ def test_serialize_response_builds_direct_itinerary_with_documented_shape():
         "origin": "JFK", "destination": "LAX",
         "departureTimeLocal": "2024-03-15T08:00:00+00:00",
         "arrivalTimeLocal": "2024-03-15T11:00:00+00:00",
+        "durationMinutes": 180,
         "price": 100.0, "aircraft": "A320",
     }
 

@@ -17,6 +17,7 @@ const NONSTOP_ITINERARY = {
       destination: 'LAX',
       departureTimeLocal: '2024-03-15T08:30:00',
       arrivalTimeLocal: '2024-03-15T11:45:00',
+      durationMinutes: 195,
       price: 299,
       aircraft: 'A320',
     },
@@ -38,6 +39,7 @@ const ONE_STOP_ITINERARY = {
       destination: 'ORD',
       departureTimeLocal: '2024-03-15T08:30:00',
       arrivalTimeLocal: '2024-03-15T10:00:00',
+      durationMinutes: 90,
       price: 200,
       aircraft: 'A320',
     },
@@ -48,6 +50,7 @@ const ONE_STOP_ITINERARY = {
       destination: 'LAX',
       departureTimeLocal: '2024-03-15T11:30:00',
       arrivalTimeLocal: '2024-03-15T14:00:00',
+      durationMinutes: 150,
       price: 250,
       aircraft: 'A321',
     },
@@ -69,6 +72,7 @@ const INTERNATIONAL_ITINERARY = {
       destination: 'LHR',
       departureTimeLocal: '2024-03-15T20:00:00',
       arrivalTimeLocal: '2024-03-16T08:00:00',
+      durationMinutes: 720,
       price: 500,
       aircraft: 'A330',
     },
@@ -79,6 +83,7 @@ const INTERNATIONAL_ITINERARY = {
       destination: 'CDG',
       departureTimeLocal: '2024-03-16T10:00:00',
       arrivalTimeLocal: '2024-03-16T12:00:00',
+      durationMinutes: 120,
       price: 400,
       aircraft: 'A320',
     },
@@ -92,7 +97,7 @@ describe('ItineraryCard', () => {
 
     expect(screen.getByText('Nonstop')).toBeInTheDocument()
     expect(screen.getByText('Domestic')).toBeInTheDocument()
-    expect(screen.getByText(/3h 15m/)).toBeInTheDocument()
+    expect(screen.getAllByText(/3h 15m/)).toHaveLength(2)
     expect(screen.getAllByText('$299.00')).toHaveLength(2)
     expect(screen.getByText('JFK → LAX')).toBeInTheDocument()
     expect(screen.queryByText(/layover/)).not.toBeInTheDocument()

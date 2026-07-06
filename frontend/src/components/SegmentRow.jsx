@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
 import { AIRPORT_TIMEZONES } from '../data/airports'
-import { formatCurrency, formatLocalDateTime, formatTimezoneAbbreviation } from '../utils/format'
+import { formatCurrency, formatDuration, formatLocalDateTime, formatTimezoneAbbreviation } from '../utils/format'
 
 function SegmentRow({ segment }) {
   const departureTz = formatTimezoneAbbreviation(segment.departureTimeLocal, AIRPORT_TIMEZONES[segment.origin])
@@ -22,7 +22,7 @@ function SegmentRow({ segment }) {
           {arrivalTz}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          {segment.airline} {segment.flightNumber} · {segment.aircraft}
+          {segment.airline} {segment.flightNumber} · {segment.aircraft} · {formatDuration(segment.durationMinutes)}
         </Typography>
       </Stack>
 

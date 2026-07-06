@@ -18,6 +18,7 @@ function itinerary(id, price) {
         destination: 'LAX',
         departureTimeLocal: '2024-03-15T08:30:00',
         arrivalTimeLocal: '2024-03-15T11:45:00',
+        durationMinutes: 195,
         price,
         aircraft: 'A320',
       },

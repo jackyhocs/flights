@@ -30,6 +30,7 @@ def _serialize_segment(segment) -> dict:
         "destination": segment.destination,
         "departureTimeLocal": segment.departure_local.isoformat(),
         "arrivalTimeLocal": segment.arrival_local.isoformat(),
+        "durationMinutes": segment.duration_minutes,
         "price": segment.price,
         "aircraft": segment.aircraft,
     }
