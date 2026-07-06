@@ -15,7 +15,7 @@ import SearchForm from './components/SearchForm'
 import { useFlightSearch } from './hooks/useFlightSearch'
 
 function App() {
-  const { data, loading, error, search } = useFlightSearch()
+  const { data, loading, error, search, clear } = useFlightSearch()
 
   return (
     <>
@@ -30,7 +30,7 @@ function App() {
 
       <Container component="main" maxWidth="sm" sx={{ py: 4 }}>
         <Stack spacing={2}>
-          <SearchForm onSearch={search} />
+          <SearchForm onSearch={search} onValidationError={clear} />
 
           {loading && <LoadingSpinner />}
           {error && <ErrorBanner message={error} />}

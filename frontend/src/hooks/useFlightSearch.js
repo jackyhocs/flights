@@ -22,5 +22,9 @@ export function useFlightSearch() {
     }
   }, [])
 
-  return { data, loading, error, search }
+  const clear = useCallback(() => {
+    setData(null)
+  }, [])
+
+  return { data, loading, error, search, clear }
 }

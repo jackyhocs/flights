@@ -69,4 +69,17 @@ describe('SearchForm', () => {
     expect(await screen.findByText(/different/i)).toBeInTheDocument()
     expect(onSearch).not.toHaveBeenCalled()
   })
+
+  it('calls onValidationError instead of onSearch when the form is invalid', async () => {
+    const user = userEvent.setup()
+    const onSearch = vi.fn()
+    const onValidationError = vi.fn()
+    render(<SearchForm onSearch={onSearch} onValidationError={onValidationError} />)
+
+    await user.click(screen.getByRole('button', { name: /search/i }))
+
+    expect(await screen.findByText(/please select/i)).toBeInTheDocument()
+    expect(onValidationError).toHaveBeenCalledTimes(1)
+    expect(onSearch).not.toHaveBeenCalled()
+  })
 })

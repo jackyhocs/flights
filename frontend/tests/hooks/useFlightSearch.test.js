@@ -50,4 +50,22 @@ describe('useFlightSearch', () => {
     expect(result.current.error).toBe('unknown airport code: XXX')
     expect(result.current.data).toBeNull()
   })
+
+  it('clears existing data via clear()', async () => {
+    const responseBody = { origin: 'JFK', destination: 'LAX', date: '2024-03-15', count: 1, itineraries: [] }
+    searchFlights.mockResolvedValueOnce(responseBody)
+
+    const { result } = renderHook(() => useFlightSearch())
+
+    act(() => {
+      result.current.search({ origin: 'JFK', destination: 'LAX', date: '2024-03-15' })
+    })
+    await waitFor(() => expect(result.current.data).toEqual(responseBody))
+
+    act(() => {
+      result.current.clear()
+    })
+
+    expect(result.current.data).toBeNull()
+  })
 })

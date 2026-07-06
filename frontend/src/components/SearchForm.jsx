@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography'
 import { AIRPORTS } from '../data/airports'
 import { validate } from './searchFormValidation'
 
-function SearchForm({ onSearch }) {
+function SearchForm({ onSearch, onValidationError }) {
   const [origin, setOrigin] = useState('')
   const [destination, setDestination] = useState('')
   const [date, setDate] = useState('')
@@ -20,6 +20,7 @@ function SearchForm({ onSearch }) {
     const validationError = validate({ origin, destination, date })
     setError(validationError)
     if (validationError) {
+      onValidationError?.()
       return
     }
 
